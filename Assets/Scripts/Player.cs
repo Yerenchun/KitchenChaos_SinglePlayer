@@ -1,15 +1,100 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour{
+    // 单例模式
+    public static Player Instance { get; private set; }
+
+    // 是否高亮柜台事件
+    public event EventHandler<OnSelectionChangedEventArgs> OnSelectedCounterChanged;
+    // 高亮柜台事件的数据信息类
+    public class OnSelectionChangedEventArgs: EventArgs {
+        public ClearCounter selectedCounter;
+    }
 
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotateSpeed = 10f;
     [SerializeField] private GameInput gameInput;
+    private const string COUNTERS_LAYER_NAME = "Counters";
+    // 记录是否在进行移动
     private bool isWalking;
+    // 记录是否最后的移动方向
+    private Vector3 lastInteratDir;
+    private ClearCounter selectedCounter;
+
+    private void Awake() {
+        if(Instance == null){
+            Instance = this;
+        }else{
+            if(Instance != this){
+                Destroy(gameObject);
+            }
+        }
+        DontDestroyOnLoad(gameObject);
+        // 下面是视频中使用的单例模式
+        // if(Instance != null){
+        //     Debug.LogError("Player already exists!");
+        // }
+        // Instance = this;
+    }
+
+    private void Start() {
+        gameInput.OnInteractAction += GameInput_OnInteractAction;
+    }
+
+    // 交互启动事件处理器，进行交互逻辑处理
+    private void GameInput_OnInteractAction(object sender, EventArgs e) {
+        // 如果检测到的可交互对象不为空，即调用该对象的交互逻辑
+        if(selectedCounter != null){
+            selectedCounter.Interact();
+        }
+    }
 
     private void Update() {
+        HandleMovement();
+        HandleInteraction();
+    }
+
+    public bool IsWalking(){
+        return isWalking;
+    }
+
+    private void HandleInteraction(){
+        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+
+        // 设置移动的方向
+        Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
+
+        // 记录最后的移动朝向
+        if(moveDir != Vector3.zero){
+            lastInteratDir = moveDir;
+        }
+
+        float interactDistance = 2f;
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, lastInteratDir, out hit, interactDistance, 1 << LayerMask.NameToLayer("Counters"))){
+            Debug.Log("检测到柜台");
+            // 尝试获取到 ClearCounter 组件，并且会判断是否为空
+            if(hit.transform.TryGetComponent(out ClearCounter clearCounter)){
+                if(this.selectedCounter != clearCounter){
+                    SetSelectedCounter(clearCounter);
+                }
+            }else{
+                // 获取不到 ClearCounter 组件，也置空
+                SetSelectedCounter(null);
+            }
+        }else{
+            // 如果什么都没有检测到
+            SetSelectedCounter(null);
+        }
+    }
+
+    private void HandleMovement(){
+        
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
 
         // 设置移动的方向
@@ -60,8 +145,12 @@ public class Player : MonoBehaviour{
         transform.forward = Vector3.Slerp(transform.forward, moveDir, rotateSpeed * Time.deltaTime);
     }
 
-    public bool IsWalking(){
-        return isWalking;
+    // 记录传递的对象，并且启动高亮显示柜台事件
+    private void SetSelectedCounter(ClearCounter counter){
+        this.selectedCounter = counter;
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectionChangedEventArgs{
+            selectedCounter = counter
+        });
     }
 
 }

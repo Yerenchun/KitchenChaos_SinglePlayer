@@ -1,14 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using System;
+using UnityEngine.Events;
 
 public class GameInput : MonoBehaviour {
-    
+    // 使用c#预定义的EventHandler委托类型，来作为事件的参数类型
+    public event EventHandler OnInteractAction;
     private PlayerInputActions playerInputActions;
 
     private void Awake() {
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
+
+        playerInputActions.Player.Interact.performed += Interact_Performed;
+    }
+
+    private void Interact_Performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {
+        Debug.Log("按下交互按钮");
+        // 触发交互事件
+        OnInteractAction?.Invoke(this, EventArgs.Empty);
     }
 
     public Vector2 GetMovementVectorNormalized() {
@@ -16,7 +28,7 @@ public class GameInput : MonoBehaviour {
         Vector2 inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
         inputVector.Normalize();
         
-        Debug.Log(inputVector);
+        // Debug.Log(inputVector);
 
         return inputVector;
 
