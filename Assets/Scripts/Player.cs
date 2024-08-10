@@ -5,7 +5,11 @@ using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Player : MonoBehaviour{
+/// <summary>
+/// 单例玩家类，处理移动逻辑和交互检测
+/// </summary>
+public class Player : MonoBehaviour, IKitchenObjectParent{
+    #region 属性字段
     // 单例模式
     public static Player Instance { get; private set; }
 
@@ -19,13 +23,19 @@ public class Player : MonoBehaviour{
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotateSpeed = 10f;
     [SerializeField] private GameInput gameInput;
+    // 物品放置的位置
+    [SerializeField] private Transform kitchenObjectHoldPoint;
+
     private const string COUNTERS_LAYER_NAME = "Counters";
     // 记录是否在进行移动
     private bool isWalking;
     // 记录是否最后的移动方向
     private Vector3 lastInteratDir;
     private ClearCounter selectedCounter;
+    private KitchenObject kitchenObject;
+    #endregion
 
+    #region 初始化
     private void Awake() {
         if(Instance == null){
             Instance = this;
@@ -50,18 +60,23 @@ public class Player : MonoBehaviour{
     private void GameInput_OnInteractAction(object sender, EventArgs e) {
         // 如果检测到的可交互对象不为空，即调用该对象的交互逻辑
         if(selectedCounter != null){
-            selectedCounter.Interact();
+            selectedCounter.Interact(this);
         }
     }
+
+    #endregion
 
     private void Update() {
         HandleMovement();
         HandleInteraction();
     }
 
+    // 返回人物是否在移动的状态，用于是否播放移动动画
     public bool IsWalking(){
         return isWalking;
     }
+
+    #region 交互检测
 
     private void HandleInteraction(){
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
@@ -77,7 +92,7 @@ public class Player : MonoBehaviour{
         float interactDistance = 2f;
         RaycastHit hit;
         if (Physics.Raycast(transform.position, lastInteratDir, out hit, interactDistance, 1 << LayerMask.NameToLayer("Counters"))){
-            Debug.Log("检测到柜台");
+            // Debug.Log("检测到柜台");
             // 尝试获取到 ClearCounter 组件，并且会判断是否为空
             if(hit.transform.TryGetComponent(out ClearCounter clearCounter)){
                 if(this.selectedCounter != clearCounter){
@@ -93,6 +108,16 @@ public class Player : MonoBehaviour{
         }
     }
 
+    // 记录传递的对象，并且启动高亮显示柜台事件
+    private void SetSelectedCounter(ClearCounter counter){
+        this.selectedCounter = counter;
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectionChangedEventArgs{
+            selectedCounter = counter
+        });
+    }
+    #endregion
+
+    #region 移动逻辑
     private void HandleMovement(){
         
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
@@ -144,13 +169,29 @@ public class Player : MonoBehaviour{
         // 通过插值函数，使旋转更加平滑
         transform.forward = Vector3.Slerp(transform.forward, moveDir, rotateSpeed * Time.deltaTime);
     }
+    #endregion
 
-    // 记录传递的对象，并且启动高亮显示柜台事件
-    private void SetSelectedCounter(ClearCounter counter){
-        this.selectedCounter = counter;
-        OnSelectedCounterChanged?.Invoke(this, new OnSelectionChangedEventArgs{
-            selectedCounter = counter
-        });
+    #region 实现物品交互
+    public Transform GettKitchenObjectFollowTransform()
+    {
+        return kitchenObjectHoldPoint;
     }
+
+    public void SetKitchenObject(KitchenObject kitchenObject)
+    {
+        this.kitchenObject = kitchenObject;
+    }
+
+    public KitchenObject GetKitchenObject()
+    {
+        return kitchenObject;
+    }
+
+    public void ClearKitchenObject()
+    {
+        kitchenObject = null;
+    }
+    #endregion
+
 
 }
