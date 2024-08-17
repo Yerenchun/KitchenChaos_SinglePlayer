@@ -9,8 +9,7 @@ public class KitchenObject : MonoBehaviour
     private IKitchenObjectParent kitchenObjectParent;
 
     // 获取厨房物品的SO，实际上就是获取数据文件
-    public KitchenObjectSO GetKitchenObjectSO()
-    {
+    public KitchenObjectSO GetKitchenObjectSO() {
         return kitchenObjectSO;
     }
     
@@ -29,7 +28,7 @@ public class KitchenObject : MonoBehaviour
 
         // 检测新的父对象是否已经装了东西了
         if(kitchenObjectParent.GetKitchenObject()){
-            Debug.LogError("Counter already has a KitchenObject");
+            Debug.LogError("CounterParent already has a KitchenObject");
         }
 
         // 通知新的父对象拥有自己

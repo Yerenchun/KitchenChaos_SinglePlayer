@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
     public event EventHandler<OnSelectionChangedEventArgs> OnSelectedCounterChanged;
     // 高亮柜台事件的数据信息类
     public class OnSelectionChangedEventArgs: EventArgs {
-        public ClearCounter selectedCounter;
+        public BaseCounter selectedCounter;
     }
 
     [SerializeField] private float moveSpeed = 7f;
@@ -31,9 +31,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
     private bool isWalking;
     // 记录是否最后的移动方向
     private Vector3 lastInteratDir;
-    private ClearCounter selectedCounter;
+    private BaseCounter selectedCounter;
     private KitchenObject kitchenObject;
     #endregion
+    
 
     #region 初始化
     private void Awake() {
@@ -91,12 +92,13 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
 
         float interactDistance = 2f;
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, lastInteratDir, out hit, interactDistance, 1 << LayerMask.NameToLayer("Counters"))){
+        if (Physics.Raycast(transform.position, lastInteratDir, out hit, interactDistance, 
+                            1 << LayerMask.NameToLayer("Counters"))){
             // Debug.Log("检测到柜台");
             // 尝试获取到 ClearCounter 组件，并且会判断是否为空
-            if(hit.transform.TryGetComponent(out ClearCounter clearCounter)){
-                if(this.selectedCounter != clearCounter){
-                    SetSelectedCounter(clearCounter);
+            if(hit.transform.TryGetComponent(out BaseCounter baseCounter)){
+                if(this.selectedCounter != baseCounter){
+                    SetSelectedCounter(baseCounter);
                 }
             }else{
                 // 获取不到 ClearCounter 组件，也置空
@@ -109,7 +111,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
     }
 
     // 记录传递的对象，并且启动高亮显示柜台事件
-    private void SetSelectedCounter(ClearCounter counter){
+    private void SetSelectedCounter(BaseCounter counter){
         this.selectedCounter = counter;
         OnSelectedCounterChanged?.Invoke(this, new OnSelectionChangedEventArgs{
             selectedCounter = counter
@@ -171,7 +173,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
     }
     #endregion
 
-    #region 实现物品交互
+    #region 实现设置物品接口
     public Transform GettKitchenObjectFollowTransform()
     {
         return kitchenObjectHoldPoint;
@@ -192,6 +194,4 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
         kitchenObject = null;
     }
     #endregion
-
-
 }
