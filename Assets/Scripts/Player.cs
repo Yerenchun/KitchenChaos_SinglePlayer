@@ -193,5 +193,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
     {
         kitchenObject = null;
     }
+    
+    // 检测kitchenObject是否为空
+    public bool HasKitchenObject() {
+        return kitchenObject != null;
+    }
     #endregion
 }

@@ -25,4 +25,10 @@ public interface IKitchenObjectParent {
     /// 移除物品对象
     /// </summary>
     public void ClearKitchenObject();
+
+    /// <summary>
+    /// 判断是否拥有物品
+    /// </summary>
+    /// <returns></returns>
+    public bool HasKitchenObject();
 }
