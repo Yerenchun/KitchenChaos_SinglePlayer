@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class KitchenObject : MonoBehaviour
@@ -45,5 +46,27 @@ public class KitchenObject : MonoBehaviour
     /// <returns></returns>
     public IKitchenObjectParent GetKitchenObjectParent(){
         return kitchenObjectParent;
+    }
+
+    public void DestroySelf() {
+        // 清除父物体的拥有关系
+        kitchenObjectParent.ClearKitchenObject();
+        Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// 生成KitchenObject，并且设置父拥有者
+    /// </summary>
+    /// <param name="kitchenObjectSO">需要被生成的物品数据</param>
+    /// <param name="kitchenObjectParent">生成后的父拥有者</param>
+    /// <returns></returns>
+    public static KitchenObject SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent) {
+        // 创建一个物品，
+        Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
+        // 并且设置为counterTopPoint的子对象，马上设置给柜台拿着
+        KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
+        // 设置父拥有者
+        kitchenObject.SetKitchenObjectParent(kitchenObjectParent);
+        return kitchenObject;
     }
 }

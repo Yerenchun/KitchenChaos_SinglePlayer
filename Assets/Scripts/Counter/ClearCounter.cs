@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ClearCounter : BaseCounter{
 
-    [SerializeField] private KitchenObjectSO kitchenObjectSO;
+    // 只是临时存取物品的柜台，不需要知道物品的具体数据
+    // [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
     /// <summary>
     /// 与柜台交互，存放物品

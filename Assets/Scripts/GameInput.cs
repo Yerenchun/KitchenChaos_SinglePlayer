@@ -4,10 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour {
     // 使用c#预定义的EventHandler委托类型，来作为事件的参数类型
     public event EventHandler OnInteractAction;
+    public event EventHandler OnInteractAlternateAction;
+    
+    
     private PlayerInputActions playerInputActions;
 
     private void Awake() {
@@ -15,6 +19,13 @@ public class GameInput : MonoBehaviour {
         playerInputActions.Player.Enable();
 
         playerInputActions.Player.Interact.performed += Interact_Performed;
+        playerInputActions.Player.InteraceAlternate.performed += InteractAlternate_Performed;
+    }
+
+    private void InteractAlternate_Performed(InputAction.CallbackContext obj)
+    {
+        // 触发切菜的交互事件
+        OnInteractAlternateAction?.Invoke(this, EventArgs.Empty);
     }
 
     private void Interact_Performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {

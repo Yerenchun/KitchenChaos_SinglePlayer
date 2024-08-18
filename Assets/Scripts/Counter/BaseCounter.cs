@@ -15,6 +15,13 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
         Debug.LogError("BaseCounter.Interact()");
     }
     
+    /// <summary>
+    /// 与柜台交互，切菜
+    /// </summary>
+    public virtual void InteractAlternate(Player player) {
+        Debug.LogError("BaseCounter.InteractAlternate()");
+    }
+    
     // 获取物品对象的位置
     public Transform GettKitchenObjectFollowTransform(){
         return counterTopPoint;

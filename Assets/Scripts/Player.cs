@@ -52,9 +52,20 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
         // }
         // Instance = this;
     }
-
+    
     private void Start() {
         gameInput.OnInteractAction += GameInput_OnInteractAction;
+        gameInput.OnInteractAlternateAction += gameInput_OnInteractAlternateAction;
+    }
+    #endregion
+
+    #region 事件处理器
+    // 切菜交互事件处理器
+    private void gameInput_OnInteractAlternateAction(object sender, EventArgs e) {
+        // 如果检测到的可交互对象不为空，即调用该对象的交互逻辑
+        if(selectedCounter != null){
+            selectedCounter.InteractAlternate(this);
+        }
     }
 
     // 交互启动事件处理器，进行交互逻辑处理
@@ -64,8 +75,8 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
             selectedCounter.Interact(this);
         }
     }
-
     #endregion
+    
 
     private void Update() {
         HandleMovement();
@@ -134,13 +145,13 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
         bool canMove = !Physics.CapsuleCast(transform.position, 
                         transform.position + Vector3.up * playerHeight, 
                         playerRadius, moveDir, moveDistance);
-        // TODO 这种移动方式，仍有不妥，在方体的拐角会有卡主的情况
+        // TODO 这种移动方式，仍有不妥，在方体的拐角会有卡住的情况
         if(!canMove) {
             // 如果不能斜着向左或者向右移动
             
             // 判断一下能否朝水平移动
             Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
-            canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight,
+            canMove = moveDir.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight,
                                         playerRadius, moveDirX, moveDistance);
             if(canMove) {
                 // 只能朝水平移动
@@ -150,7 +161,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
 
                 // 尝试在垂直方向上移动
                 Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-                canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight,
+                canMove = moveDir.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight,
                                         playerRadius, moveDirZ, moveDistance);
                 if(canMove) {
                     // 只能朝垂直方向移动
