@@ -16,10 +16,10 @@ public class ContainerCounterVisual : MonoBehaviour
 
     private void Start()
     {
-        containerCounter.OnPlayerGrabbedObject += containerCounter_OnPlayerGrabbedObject;
+        containerCounter.OnPlayerGrabbedObject += ContainerCounter_OnPlayerGrabbedObject;
     }
 
-    private void containerCounter_OnPlayerGrabbedObject(object sender, EventArgs e)
+    private void ContainerCounter_OnPlayerGrabbedObject(object sender, EventArgs e)
     {
         animator.SetTrigger(OPEN_CLOSE);
     }

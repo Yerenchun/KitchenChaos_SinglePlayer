@@ -16,7 +16,7 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     }
     
     /// <summary>
-    /// 与柜台交互，切菜
+    /// 与柜台的特殊交互
     /// </summary>
     public virtual void InteractAlternate(Player player) {
         Debug.LogError("BaseCounter.InteractAlternate()");

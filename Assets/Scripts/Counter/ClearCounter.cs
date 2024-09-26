@@ -8,7 +8,7 @@ public class ClearCounter : BaseCounter{
     // [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
     /// <summary>
-    /// 与柜台交互，存放物品
+    /// 与普通柜台交互，存取物品
     /// </summary>
     public override void Interact(Player player){
         if (!this.HasKitchenObject()) {

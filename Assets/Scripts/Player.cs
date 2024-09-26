@@ -29,7 +29,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
     private const string COUNTERS_LAYER_NAME = "Counters";
     // 记录是否在进行移动
     private bool isWalking;
-    // 记录是否最后的移动方向
+    // 交互方向一定是最后的移动朝向
     private Vector3 lastInteratDir;
     private BaseCounter selectedCounter;
     private KitchenObject kitchenObject;
@@ -60,7 +60,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
     #endregion
 
     #region 事件处理器
-    // 切菜交互事件处理器
+    // 柜台特殊交互事件处理器
     private void gameInput_OnInteractAlternateAction(object sender, EventArgs e) {
         // 如果检测到的可交互对象不为空，即调用该对象的交互逻辑
         if(selectedCounter != null){
@@ -68,7 +68,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
         }
     }
 
-    // 交互启动事件处理器，进行交互逻辑处理
+    // 一般柜台交互启动事件处理器，进行交互逻辑处理
     private void GameInput_OnInteractAction(object sender, EventArgs e) {
         // 如果检测到的可交互对象不为空，即调用该对象的交互逻辑
         if(selectedCounter != null){
@@ -89,7 +89,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
     }
 
     #region 交互检测
-
+    /// <summary>
+    /// 检测可交互的柜台
+    /// </summary>
     private void HandleInteraction(){
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
 
@@ -104,7 +106,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
         float interactDistance = 2f;
         RaycastHit hit;
         if (Physics.Raycast(transform.position, lastInteratDir, out hit, interactDistance, 
-                            1 << LayerMask.NameToLayer("Counters"))){
+                            1 << LayerMask.NameToLayer(COUNTERS_LAYER_NAME))){
             // Debug.Log("检测到柜台");
             // 尝试获取到 ClearCounter 组件，并且会判断是否为空
             if(hit.transform.TryGetComponent(out BaseCounter baseCounter)){

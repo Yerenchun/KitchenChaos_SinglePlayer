@@ -10,7 +10,7 @@ public class ContainerCounter : BaseCounter
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
     
     /// <summary>
-    /// 与柜台交互，拿取东西
+    /// 与容器柜台交互，拿取东西
     /// </summary>
     public override void Interact(Player player) {
         // 玩家没有拿着物品时，才能再拿物品

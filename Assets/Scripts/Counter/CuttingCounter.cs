@@ -1,14 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CuttingCounter : BaseCounter
 {
+    public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
+    public class OnProgressChangedEventArgs : EventArgs {
+        public float progressNormalized;
+    }
+
+    public event EventHandler OnCut;
+    
     // 相当于字典，存储所有处理前和处理后的食材数据
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
+    private int cuttingProgress;
     
     /// <summary>
-    /// 与柜台交互，拿取
+    /// 与切菜柜台交互，拿取
     /// </summary>
     /// <param name="player"></param>
     public override void Interact(Player player) {
@@ -16,8 +25,15 @@ public class CuttingCounter : BaseCounter
             // 柜台本身没有物品，就可以放置物品
             if (player.HasKitchenObject()) {
                 // 如果玩家拥有的食材可被处理，才可放置在柜台上
-                if(HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectSO()))
+                if(HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectSO())){
                     player.GetKitchenObject().SetKitchenObjectParent(this);
+                    cuttingProgress = 0;
+                    CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
+                    // 初始化进度条
+                    OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs {
+                        progressNormalized = (float)cuttingProgress / cuttingRecipeSO.cuttingProgressMax 
+                    });
+                }
             }else {
                 // 如果玩家没有物品，柜台也没有物品，就不能与柜台进行交互
             }
@@ -34,38 +50,57 @@ public class CuttingCounter : BaseCounter
     }
     
     /// <summary>
-    /// 与柜台交互，切菜
+    /// 与柜台特殊交互，切菜
     /// </summary>
     /// <param name="player"></param>
     public override void InteractAlternate(Player player) {
-        
         if (this.HasKitchenObject() && HasRecipeWithInput(GetKitchenObject().GetKitchenObjectSO())) {
             // 只有柜台有食材后，并且该食材能够被处理，才能进行处理
-            // 得到处理后的食材数据
-            KitchenObjectSO outputKitchenObject = GetOutputForInput(GetKitchenObject().GetKitchenObjectSO());
-            GetKitchenObject().DestroySelf();
-            // 生成食材，并且设置其拥有者
-            KitchenObject.SpawnKitchenObject(outputKitchenObject, this);
+            cuttingProgress++;
+            OnCut?.Invoke(this, EventArgs.Empty);
+            CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
+            // 推进度条
+            OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs {
+                progressNormalized = (float)cuttingProgress / cuttingRecipeSO.cuttingProgressMax 
+            });
+            if (cuttingProgress >= cuttingRecipeSO.cuttingProgressMax)
+            {
+                // 得到处理后的食材数据
+                KitchenObjectSO outputKitchenObject = GetOutputForInput(GetKitchenObject().GetKitchenObjectSO());
+                GetKitchenObject().DestroySelf();
+                // 生成食材，并且设置其拥有者
+                KitchenObject.SpawnKitchenObject(outputKitchenObject, this);
+            }
         }
     }
 
     // 判断食材能否处理
     private bool HasRecipeWithInput(KitchenObjectSO inputKitchenObjectSO)
     {
-        foreach (CuttingRecipeSO cuttingRecipeSO in cuttingRecipeSOArray)
-        {
-            if (cuttingRecipeSO.input == inputKitchenObjectSO)
-                return true;
-        }
-        return false;
+        CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(inputKitchenObjectSO);
+        return cuttingRecipeSO != null;
     }
     
     // 返回处理后的食材
-    private KitchenObjectSO GetOutputForInput(KitchenObjectSO inputKitchenObjectSO) {
+    private KitchenObjectSO GetOutputForInput(KitchenObjectSO inputKitchenObjectSO)
+    {
+        CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(inputKitchenObjectSO);
+        if (cuttingRecipeSO != null)
+            return cuttingRecipeSO.output;
+        else
+        {
+            return null;
+        }
+    }
+    
+    // 获取食材对，即一种映射关系，存储处理前后的食材
+    private CuttingRecipeSO GetCuttingRecipeSOWithInput(KitchenObjectSO inputKitchenObjectSO) {
         foreach (CuttingRecipeSO cuttingRecipeSO in cuttingRecipeSOArray)
         {
             if (cuttingRecipeSO.input == inputKitchenObjectSO)
-                return cuttingRecipeSO.output;
+            {
+                return cuttingRecipeSO;
+            }
         }
         return null;
     }

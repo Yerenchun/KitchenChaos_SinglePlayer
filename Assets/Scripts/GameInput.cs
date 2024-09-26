@@ -11,7 +11,6 @@ public class GameInput : MonoBehaviour {
     public event EventHandler OnInteractAction;
     public event EventHandler OnInteractAlternateAction;
     
-    
     private PlayerInputActions playerInputActions;
 
     private void Awake() {
@@ -33,16 +32,17 @@ public class GameInput : MonoBehaviour {
         // 触发交互事件
         OnInteractAction?.Invoke(this, EventArgs.Empty);
     }
-
+    
+    /// <summary>
+    /// 获取玩家输入方向
+    /// </summary>
+    /// <returns></returns>
     public Vector2 GetMovementVectorNormalized() {
         // 读取玩家输入
         Vector2 inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
         inputVector.Normalize();
-        
         // Debug.Log(inputVector);
-
         return inputVector;
-
 
         // if(Input.GetKey(KeyCode.W)){
         //     inputVector.y = +1;

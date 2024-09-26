@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 public class SelectedCounterVisual : MonoBehaviour {
-    // 对于ClearCounter的引用
+    // 对于Counter的引用
     [SerializeField] private BaseCounter baseCounter;
     [SerializeField] private GameObject visualGameObject;
 
@@ -17,7 +17,7 @@ public class SelectedCounterVisual : MonoBehaviour {
     }
 
     private void Player_OnSelectedCounterChanged(object sender, Player.OnSelectionChangedEventArgs e) {
-        // 如果当前选中的Counter是clearCounter，则显示，否则隐藏
+        // 如果当前选中的Counter是Counter，则显示，否则隐藏
         if(e.selectedCounter == baseCounter){
             Show();
         }else{
