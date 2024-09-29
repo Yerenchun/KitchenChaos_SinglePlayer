@@ -68,6 +68,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: ContainerCounter _Tomato
       objectReference: {fileID: 0}
+    - target: {fileID: 6764467301421291721, guid: 4eaa1e652756ba146a57930caa43d3e7,
+        type: 3}
+      propertyPath: visualGameObjects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6764467301421291721, guid: 4eaa1e652756ba146a57930caa43d3e7,
+        type: 3}
+      propertyPath: visualGameObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 8015271879138182829}
     - target: {fileID: 8903563142617019079, guid: 4eaa1e652756ba146a57930caa43d3e7,
         type: 3}
       propertyPath: m_Sprite
@@ -79,3 +89,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4eaa1e652756ba146a57930caa43d3e7, type: 3}
+--- !u!1 &8015271879138182829 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8900100606072716190, guid: 4eaa1e652756ba146a57930caa43d3e7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1493072014293237043}
+  m_PrefabAsset: {fileID: 0}

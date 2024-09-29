@@ -186,7 +186,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseCounter: {fileID: -3361939672238082678}
-  visualGameObject: {fileID: 4332730868014740611}
+  visualGameObjects:
+  - {fileID: 4332730868014740611}
 --- !u!4 &8529528291827340135 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4589716710238282923, guid: 0004cb1e11ad014419b943c7da960724,
@@ -297,7 +298,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9659b069e36dd7e498ea4fd4d4cb6795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kitchenObjectSO: {fileID: 11400000, guid: 8122a30a34578354c8351f1a111c3fd7, type: 2}
   counterTopPoint: {fileID: 2069976949541074485}
 --- !u!4 &7221101996531547195 stripped
 Transform:

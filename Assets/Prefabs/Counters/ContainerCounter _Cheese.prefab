@@ -80,8 +80,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: ContainerCounter _Cheese
       objectReference: {fileID: 0}
+    - target: {fileID: 6764467301421291721, guid: 4eaa1e652756ba146a57930caa43d3e7,
+        type: 3}
+      propertyPath: visualGameObjects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6764467301421291721, guid: 4eaa1e652756ba146a57930caa43d3e7,
+        type: 3}
+      propertyPath: visualGameObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 6696968386049353622}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4eaa1e652756ba146a57930caa43d3e7, type: 3}
+--- !u!1 &6696968386049353622 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8900100606072716190, guid: 4eaa1e652756ba146a57930caa43d3e7,
+    type: 3}
+  m_PrefabInstance: {fileID: 2842874292747492360}
+  m_PrefabAsset: {fileID: 0}

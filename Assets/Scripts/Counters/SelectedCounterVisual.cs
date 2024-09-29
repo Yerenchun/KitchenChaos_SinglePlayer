@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 public class SelectedCounterVisual : MonoBehaviour {
     // 对于Counter的引用
     [SerializeField] private BaseCounter baseCounter;
-    [SerializeField] private GameObject visualGameObject;
+    [SerializeField] private GameObject[] visualGameObjects;
 
 
     // 如果将下面这句代码，放在Awake方法中，那么可能Player还没有初始化，就会报空引用异常
@@ -26,10 +26,16 @@ public class SelectedCounterVisual : MonoBehaviour {
     }
 
     private void Show(){
-        visualGameObject.SetActive(true);
+        for (int i = 0; i < visualGameObjects.Length; i++)
+        {
+            visualGameObjects[i].SetActive(true);
+        }
     }
 
     private void Hide(){
-        visualGameObject.SetActive(false);
+        for (int i = 0; i < visualGameObjects.Length; i++)
+        {
+            visualGameObjects[i].SetActive(false);
+        }
     }
 }
