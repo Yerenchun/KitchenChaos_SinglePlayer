@@ -8,7 +8,6 @@ public class ProgressBarUI : MonoBehaviour
 {
     [SerializeField] private GameObject hasProgressGameObject;
     [SerializeField] private Image barImage;
-
     private IHasProgress hasProgress;
     
     private void Start()
