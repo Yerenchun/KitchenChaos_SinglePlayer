@@ -23,6 +23,26 @@ public class ClearCounter : BaseCounter{
             // 柜台已经有物品，就不能放置物品
             if (player.HasKitchenObject()) {
                 // 如果玩家拿着某个物品
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    // 当玩家拿着一个盘子的时候
+                    if (plateKitchenObject.TryAddIngreddient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
+                else
+                {
+                    // 如果玩家没有拿盘子，拿着其他东西
+                    if (GetKitchenObject().TryGetPlate(out  plateKitchenObject))
+                    {
+                        // 柜台上面放着盘子，就可以尝试让盘子装东西
+                        if (plateKitchenObject.TryAddIngreddient(player.GetKitchenObject().GetKitchenObjectSO()))
+                        {
+                            player.GetKitchenObject().DestroySelf();
+                        }
+                    }
+                }
             }   
             else {
                 // 如果柜台有东西，玩家没有拿着东西，才能拿取柜台的物品

@@ -55,6 +55,24 @@ public class KitchenObject : MonoBehaviour
     }
 
     /// <summary>
+    /// 判断该物品会否是盘子
+    /// </summary>
+    /// <param name="plateKitchenObject"></param>
+    /// <returns></returns>
+    public bool TryGetPlate(out PlateKitchenObject plateKitchenObject)
+    {
+        if (this is PlateKitchenObject)
+        {
+            plateKitchenObject = this as PlateKitchenObject;
+            return true;
+        }else
+        {
+            plateKitchenObject = null;
+            return false;
+        }
+    }
+
+    /// <summary>
     /// 生成KitchenObject，并且设置父拥有者
     /// </summary>
     /// <param name="kitchenObjectSO">需要被生成的物品数据</param>

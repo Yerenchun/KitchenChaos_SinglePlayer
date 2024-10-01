@@ -37,6 +37,14 @@ public class CuttingCounter : BaseCounter,IHasProgress
             // 柜台已经有物品，就不能放置物品
             if (player.HasKitchenObject()) {
                 // 如果玩家拿着某个物品
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    // 当玩家拿着一个盘子的时候
+                    if (plateKitchenObject.TryAddIngreddient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
             }   
             else {
                 // 如果柜台有东西，玩家没有拿着东西，才能拿取柜台的物品
