@@ -13,7 +13,7 @@ public class StoveCounterVisual : MonoBehaviour
 
     /// <summary>
     /// 根据信息是否显示烤制特效
-    /// </summary>
+    /// </summary>  
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void StoveCounter_OnStateChanged(object sender, StoveCounter.OnStoveStateChangedEventArgs e)
