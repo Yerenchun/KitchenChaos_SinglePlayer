@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -5,6 +6,12 @@ using UnityEngine;
 
 public class PlateKitchenObject : KitchenObject
 {
+    public event EventHandler<OnIngredientAddedEventArgs> OnIngredientAdded;
+    public class OnIngredientAddedEventArgs : EventArgs
+    {
+        public KitchenObjectSO KitchenObjectSO;
+    }
+    
     // 可被添加到盘子中的物品清单
     [SerializeField] private List<KitchenObjectSO> validKitchenObjectList;
     
@@ -34,6 +41,11 @@ public class PlateKitchenObject : KitchenObject
         else
         {
             kitchenObjectList.Add(kitchenObjectSO);
+            // 通知盘子，显示这个食材
+            OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs
+            {
+                KitchenObjectSO = kitchenObjectSO
+            });
             return true;
         }
     }
