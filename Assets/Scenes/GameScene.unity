@@ -2297,6 +2297,51 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1008893461}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1047484569
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1047484570}
+  - component: {fileID: 1047484571}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1047484570
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047484569}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1047484571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047484569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f1fc860ed200b46b293568104afd38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClipRefsSO: {fileID: 11400000, guid: ebf4b1cf3bf3e404dbdd92b4519e83ac, type: 2}
 --- !u!1001 &1076920982
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4146,6 +4191,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2107849288}
   - component: {fileID: 2107849289}
+  - component: {fileID: 2107849290}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -4186,6 +4232,18 @@ MonoBehaviour:
   rotateSpeed: 10
   gameInput: {fileID: 364144304}
   kitchenObjectHoldPoint: {fileID: 642949433}
+--- !u!114 &2107849290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107849287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bafd4011e80fb845b7e3f33e04153ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2118317025
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4298,3 +4356,4 @@ SceneRoots:
   - {fileID: 932778118}
   - {fileID: 438723426}
   - {fileID: 1559629631}
+  - {fileID: 1047484570}

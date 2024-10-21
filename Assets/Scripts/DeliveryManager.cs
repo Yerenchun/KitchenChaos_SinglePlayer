@@ -9,6 +9,10 @@ public class DeliveryManager : MonoBehaviour
     public event EventHandler OnrecipeSpawned;
     // 销毁订单
     public event EventHandler OnRecipeCompleted;
+    // 物品交付成功
+    public event EventHandler OnRecipeSuccess;
+    // 物品交付失败
+    public event EventHandler OnRecipeFailed;
     
     public static DeliveryManager Instance { get; private set; }
 
@@ -95,6 +99,7 @@ public class DeliveryManager : MonoBehaviour
                     waitingRecipeSOList.RemoveAt(i);
                     // 启动事件，移除订单
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+                    OnRecipeSuccess?.Invoke(this, EventArgs.Empty);
                     return;
                 }
             }
@@ -102,6 +107,8 @@ public class DeliveryManager : MonoBehaviour
 
         // 玩家提供的东西和订单的食谱不匹配
         Debug.Log("玩家没有提供正确的汉堡");
+        OnRecipeFailed?.Invoke(this, EventArgs.Empty);
+
     }
 
     /// <summary>

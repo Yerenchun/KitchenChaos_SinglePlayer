@@ -12,6 +12,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
     #region 属性字段
     // 单例模式
     public static Player Instance { get; private set; }
+    
+    // 捡起事件，触发对应音效
+    public event EventHandler OnPickedSomething;
 
     // 是否高亮柜台事件
     public event EventHandler<OnSelectionChangedEventArgs> OnSelectedCounterChanged;
@@ -195,6 +198,11 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
     public void SetKitchenObject(KitchenObject kitchenObject)
     {
         this.kitchenObject = kitchenObject;
+
+        if (kitchenObject != null)
+        {
+            OnPickedSomething?.Invoke(this,EventArgs.Empty);
+        }
     }
 
     public KitchenObject GetKitchenObject()

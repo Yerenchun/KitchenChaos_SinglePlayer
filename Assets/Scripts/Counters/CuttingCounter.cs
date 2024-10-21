@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CuttingCounter : BaseCounter,IHasProgress
 {
+    public static event EventHandler OnAnyCut; 
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
     public event EventHandler OnCut;
     
@@ -61,7 +62,8 @@ public class CuttingCounter : BaseCounter,IHasProgress
         if (this.HasKitchenObject() && HasRecipeWithInput(GetKitchenObject().GetKitchenObjectSO())) {
             // 只有柜台有食材后，并且该食材能够被处理，才能进行处理
             cuttingProgress++;
-            OnCut?.Invoke(this, EventArgs.Empty);
+            OnCut?.Invoke(this, EventArgs.Empty);// 触发动画
+            OnAnyCut?.Invoke(this,EventArgs.Empty);// 触发音效
             CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
             // 推进度条
             OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs {
