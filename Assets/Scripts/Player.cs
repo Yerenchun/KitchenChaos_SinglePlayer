@@ -65,6 +65,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
     #region 事件处理器
     // 柜台特殊交互事件处理器
     private void gameInput_OnInteractAlternateAction(object sender, EventArgs e) {
+        // 判断是否正在游戏当中
+        if(!KitchenGameManager.Instance.IsGamePlaying()) return;
+        
         // 如果检测到的可交互对象不为空，即调用该对象的交互逻辑
         if(selectedCounter != null){
             selectedCounter.InteractAlternate(this);
@@ -73,6 +76,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent{
 
     // 一般柜台交互启动事件处理器，进行交互逻辑处理
     private void GameInput_OnInteractAction(object sender, EventArgs e) {
+        // 判断是否正在游戏当中
+        if(!KitchenGameManager.Instance.IsGamePlaying()) return;
+        
         // 如果检测到的可交互对象不为空，即调用该对象的交互逻辑
         if(selectedCounter != null){
             selectedCounter.Interact(this);

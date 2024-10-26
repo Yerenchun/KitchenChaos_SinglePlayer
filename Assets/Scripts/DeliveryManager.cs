@@ -23,6 +23,7 @@ public class DeliveryManager : MonoBehaviour
     private float spawnRecipeTimer;
     private float spawnRecipeTimerMax = 4f;
     private int waitingRecipesMax = 4;
+    private int successfulRecipesAmount;
 
     private void Awake()
     {
@@ -38,6 +39,7 @@ public class DeliveryManager : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+        DontDestroyOnLoad(gameObject);
 
         waitingRecipeSOList = new List<RecipeSO>();
     }
@@ -96,6 +98,7 @@ public class DeliveryManager : MonoBehaviour
                 {
                     // 此时玩家就交付了正确的汉堡
                     Debug.Log("玩家交付了正确的东西！");
+                    successfulRecipesAmount++;// 记录
                     waitingRecipeSOList.RemoveAt(i);
                     // 启动事件，移除订单
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
@@ -118,6 +121,11 @@ public class DeliveryManager : MonoBehaviour
     public List<RecipeSO> GetWaitingRecipeSOList()
     {
         return waitingRecipeSOList;
+    }
+
+    public int GetsuccessfulRecipesAmount()
+    {
+        return successfulRecipesAmount;
     }
 
 }
